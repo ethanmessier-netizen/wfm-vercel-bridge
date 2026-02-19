@@ -1,0 +1,5 @@
+{
+  "name": "wfm-vercel-bridge",
+  "private": true,
+  "type": "module"
+}
