@@ -1,13 +1,8 @@
 module.exports = async (req, res) => {
   try {
-    // If no path is provided, behave like a health check.
     const path = (req.query && req.query.path) ? String(req.query.path) : "";
-    if (!path) {
-      res.status(200).send("pong");
-      return;
-    }
+    if (!path) return res.status(200).send("pong");
 
-    // Build target URL like: https://api.warframe.market/v1/items
     const target = `https://api.warframe.market/${path}`;
 
     const upstream = await fetch(target, {
