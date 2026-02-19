@@ -1,20 +1,25 @@
 export default async function handler(req, res) {
   try {
-    const path = (req.query.path || []).join("/");
-    const qs = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
-    const target = `https://api.warframe.market/${path}${qs}`;
+    const pathArray = req.query.path || [];
+    const path = Array.isArray(pathArray)
+      ? pathArray.join("/")
+      : pathArray;
 
-    const r = await fetch(target, {
+    const target = `https://api.warframe.market/${path}`;
+
+    const response = await fetch(target, {
       headers: {
         "Accept": "application/json",
-        "User-Agent": "WFM-Sheets-Bridge"
+        "User-Agent": "Mozilla/5.0"
       }
     });
 
-    const text = await r.text();
+    const data = await response.text();
+
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.status(r.status).send(text);
-  } catch (e) {
-    res.status(500).json({ error: String(e) });
+    res.status(response.status).send(data);
+
+  } catch (err) {
+    res.status(500).json({ error: String(err) });
   }
 }
